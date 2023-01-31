@@ -56,8 +56,6 @@ def buildTopology(numVerPer, layers):
     totalVers = numVerPer * layers
     vers = list(range(1, totalVers + 1))
 
-    facetLst = []
-    strVar = ""
     counter = 0
 
     while counter < len(vers):
@@ -72,4 +70,4 @@ def buildTopology(numVerPer, layers):
         counter += 1
 
 
-shape("hexagon", 40, 1, 10)
+shape("pentagon", 20, 1, 0)
