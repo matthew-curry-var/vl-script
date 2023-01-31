@@ -42,7 +42,9 @@ def shape(shapeStr, heightLayers, width, angOffset):
         file.write(ptsStr + "\n")
     file.close()
 
-    buildTopology(len(angPts), heightLayers)
+    ### Select topology build
+    #buildTopology(len(angPts), heightLayers) #Standard triangle array paneling
+    buildTunnelTopology(len(angPts), heightLayers) #Tunnel topology (useful for tubes/tunnels)
 
         
 def tupleToFormatedVertixString(tuple):
@@ -51,6 +53,8 @@ def tupleToFormatedVertixString(tuple):
         strVar += (" " + str(e))
     return "v " + strVar
 
+
+### Topology Function for Facets (Standard)
 def buildTopology(numVerPer, layers):
     file = open('vertexListOutput.txt', 'a')
     totalVers = numVerPer * layers
@@ -69,5 +73,35 @@ def buildTopology(numVerPer, layers):
 
         counter += 1
 
+### Topology Function for Facts (Tunnel)
+def buildTunnelTopology(numVerPer, layers):
+    file = open('vertexListOutput.txt', 'a')
+    totalVers = numVerPer * layers
+    vers = list(range(1, totalVers + 1)) #translation index list
 
-shape("pentagon", 20, 1, 0)
+    counter = 0
+    
+    while counter < totalVers:
+        
+        try:
+            if (counter % (2 * numVerPer) == 0):
+                currRow = list(range(counter, counter + numVerPer))
+                upRow = list(range(counter + numVerPer, counter + (2 * numVerPer)))
+                for x in range(len(currRow)):
+                    ele1 = vers[currRow[x]]
+                    ele2 = vers[upRow[x]]
+                    ele3 = vers[upRow[(x + 1) % numVerPer]]
+                    ele4 = vers[currRow[(x + 1) % numVerPer]]
+
+                    strVar = "f " + str(ele1) + " " + str(ele2) + " " + str(ele3) + " " + str(ele4) + "\n"
+                    #print(strVar)
+                    file.write(strVar)
+
+        except IndexError:
+            break
+
+        counter += 1
+
+
+
+shape("hexagon", 500, 2, 0)
